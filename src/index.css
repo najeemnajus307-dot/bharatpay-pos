@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#0B0F19] text-[#F3F4F6] font-sans antialiased overflow-x-hidden select-none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Focus outlines */
+  :focus-visible {
+    @apply outline-none ring-2 ring-indigo-500 ring-offset-2 ring-offset-[#0B0F19];
+  }
+}
+
+@layer utilities {
+  /* Dynamic Glassmorphism Panels */
+  .glass-panel {
+    background: rgba(17, 24, 39, 0.45);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .glass-panel-light {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+  }
+  
+  .glass-panel-heavy {
+    background: rgba(10, 15, 28, 0.85);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+  }
+  
+  .glass-input {
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    @apply rounded-xl px-4 py-3 text-white transition-all duration-200 outline-none;
+  }
+  
+  .glass-input:focus {
+    border-color: rgba(99, 102, 241, 0.5);
+    @apply ring-1 ring-indigo-500/50 shadow-glow-indigo;
+  }
+
+  /* Tactile POS Pad Keys */
+  .keypad-btn {
+    @apply relative overflow-hidden flex items-center justify-center text-2xl font-semibold rounded-2xl cursor-pointer select-none transition-all duration-100 active:scale-95;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.02);
+    height: 72px;
+  }
+
+  .keypad-btn:active {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.2);
+  }
+
+  .keypad-btn-primary {
+    @apply keypad-btn bg-gradient-to-br from-indigo-600 to-indigo-700 text-white font-bold active:from-indigo-700 active:to-indigo-800 border-none shadow-md shadow-indigo-600/10 hover:shadow-glow-indigo;
+  }
+
+  .keypad-btn-success {
+    @apply keypad-btn bg-gradient-to-br from-emerald-600 to-emerald-700 text-white font-bold active:from-emerald-700 active:to-emerald-800 border-none shadow-md shadow-emerald-600/10 hover:shadow-glow-emerald;
+  }
+
+  .keypad-btn-danger {
+    @apply keypad-btn bg-gradient-to-br from-rose-600 to-rose-700 text-white font-bold active:from-rose-700 active:to-rose-800 border-none shadow-md shadow-rose-600/10;
+  }
+
+  /* Status Pill Indicators */
+  .status-paid {
+    @apply bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-semibold px-2.5 py-1 rounded-full text-xs flex items-center gap-1.5;
+  }
+  
+  .status-pending {
+    @apply bg-amber-500/10 border border-amber-500/20 text-amber-400 font-semibold px-2.5 py-1 rounded-full text-xs flex items-center gap-1.5;
+  }
+
+  .status-failed {
+    @apply bg-rose-500/10 border border-rose-500/20 text-rose-400 font-semibold px-2.5 py-1 rounded-full text-xs flex items-center gap-1.5;
+  }
+
+  /* custom scrolls */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Grid overlay backgrounds */
+  .neon-grid {
+    background-size: 40px 40px;
+    background-image: 
+      linear-gradient(to right, rgba(99, 102, 241, 0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(99, 102, 241, 0.02) 1px, transparent 1px);
+  }
+}
