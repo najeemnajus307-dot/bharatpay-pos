@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import confetti from 'canvas-confetti';
-import { X, CheckCircle2, AlertTriangle, Printer, Download, Sparkles, Volume2, ShieldCheck, ArrowRight, Loader2 } from 'lucide-react';
+import { X, CheckCircle2, AlertTriangle, Printer, Download, Sparkles, Volume2, ShieldCheck, ArrowRight, Loader2, User } from 'lucide-react';
 import { formatRupee, generateTxnId } from '../utils/formatters';
 import { generateThermalReceipt } from '../utils/receiptGenerator';
 
@@ -147,14 +147,6 @@ export default function QRModal({ amount, customerName, settings, onClose, onPay
                   size={200}
                   level="Q"
                   includeMargin={false}
-                  imageSettings={{
-                    src: 'https://images.unsplash.com/photo-1614741118887-7a4ee193a5fa?w=32&h=32&fit=crop&q=80',
-                    x: undefined,
-                    y: undefined,
-                    height: 24,
-                    width: 24,
-                    excavate: true,
-                  }}
                 />
                 
                 {/* Visual scan frame overlay */}

@@ -11,7 +11,7 @@ import { collection, getDocs, addDoc, query, orderBy, onSnapshot, doc, deleteDoc
 import { Activity, ShieldAlert, Wifi, WifiOff } from 'lucide-react';
 
 export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [activeTab, setActiveTab] = useState('POS');
   const [collapsed, setCollapsed] = useState(false);
 
