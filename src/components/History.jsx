@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Calendar, Trash2, Printer, Download, Filter, FileSpreadsheet, FileDown, Trash } from 'lucide-react';
+import { Search, Calendar, Trash2, Printer, Download, Filter, FileSpreadsheet, FileDown, Trash, MessageCircle } from 'lucide-react';
 import { formatRupee, formatBillDate, formatBillTime } from '../utils/formatters';
 import { generateThermalReceipt } from '../utils/receiptGenerator';
 
@@ -58,6 +58,24 @@ export default function History({ transactions, onDeleteTransaction, settings })
     setSearch('');
     setStartDate('');
     setEndDate('');
+  };
+
+  const handleWhatsAppShare = (txn) => {
+    const shopName = settings?.shopName || "BharatPay Store";
+    const dateStr = formatBillDate(txn.timestamp);
+    const timeStr = formatBillTime(txn.timestamp);
+    const invoiceText = `*${shopName.toUpperCase()} INVOICE*%0A%0A` +
+      `*STATUS:* ✅ PAID SUCCESSFULLY%0A` +
+      `*INVOICE REF:* ${txn.id}%0A` +
+      `*CUSTOMER:* ${txn.customerName || 'Walk-in Customer'}%0A` +
+      `*TOTAL AMOUNT:* ₹${txn.amount}%0A` +
+      `*DATE:* ${dateStr}%0A` +
+      `*TIME:* ${timeStr}%0A%0A` +
+      `_Securely processed via BharatPay UPI POS._%0A` +
+      `_Thank you for shopping with us!_`;
+      
+    const url = `https://wa.me/?text=${invoiceText}`;
+    window.open(url, '_blank');
   };
 
   return (
@@ -184,6 +202,13 @@ export default function History({ transactions, onDeleteTransaction, settings })
                         </div>
                       ) : (
                         <div className="flex justify-end gap-1.5 opacity-80 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={() => handleWhatsAppShare(t)}
+                            className="p-2 rounded-xl bg-white/5 hover:bg-emerald-600/10 text-emerald-400 hover:text-white flex items-center justify-center transition-all"
+                            title="Share on WhatsApp"
+                          >
+                            <MessageCircle className="w-3.5 h-3.5" />
+                          </button>
                           <button
                             onClick={() => handlePrint(t)}
                             className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-indigo-400 hover:text-white flex items-center justify-center transition-all"

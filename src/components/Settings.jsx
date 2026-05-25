@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Save, ShieldCheck, Printer, Radio, Database, Sparkles, AlertCircle } from 'lucide-react';
+import { Save, ShieldCheck, Printer, Radio, Database, Sparkles, AlertCircle, Key } from 'lucide-react';
 
 export default function Settings({ settings, onSaveSettings }) {
   const [shopName, setShopName] = useState(settings?.shopName || 'BharatPay Store');
@@ -23,6 +23,16 @@ export default function Settings({ settings, onSaveSettings }) {
   const [firebaseAuthDomain, setFirebaseAuthDomain] = useState(settings?.firebaseAuthDomain || '');
   const [firebaseAppId, setFirebaseAppId] = useState(settings?.firebaseAppId || '');
 
+  // Payment Gateway configurations
+  const [activeGateway, setActiveGateway] = useState(settings?.activeGateway || 'MOCK');
+  const [phonepeMerchantId, setPhonepeMerchantId] = useState(settings?.phonepeMerchantId || '');
+  const [phonepeSaltKey, setPhonepeSaltKey] = useState(settings?.phonepeSaltKey || '');
+  const [phonepeSaltIndex, setPhonepeSaltIndex] = useState(settings?.phonepeSaltIndex || '1');
+  const [razorpayKeyId, setRazorpayKeyId] = useState(settings?.razorpayKeyId || '');
+  const [razorpayKeySecret, setRazorpayKeySecret] = useState(settings?.razorpayKeySecret || '');
+  const [cashfreeAppId, setCashfreeAppId] = useState(settings?.cashfreeAppId || '');
+  const [cashfreeSecretKey, setCashfreeSecretKey] = useState(settings?.cashfreeSecretKey || '');
+
   const [message, setMessage] = useState({ text: '', type: '' });
 
   const handleSave = () => {
@@ -38,7 +48,15 @@ export default function Settings({ settings, onSaveSettings }) {
       firebaseApiKey,
       firebaseProjectId,
       firebaseAuthDomain,
-      firebaseAppId
+      firebaseAppId,
+      activeGateway,
+      phonepeMerchantId,
+      phonepeSaltKey,
+      phonepeSaltIndex,
+      razorpayKeyId,
+      razorpayKeySecret,
+      cashfreeAppId,
+      cashfreeSecretKey
     });
     
     setMessage({ text: 'All settings saved locally successfully!', type: 'SUCCESS' });
@@ -182,6 +200,97 @@ export default function Settings({ settings, onSaveSettings }) {
       {/* Right Column: cloud Backup & POS Printer Pairings */}
       <div className="w-full lg:w-[360px] flex flex-col gap-5">
         
+        {/* Payment Gateway Configurations */}
+        <div className="glass-panel rounded-3xl p-6 border-white/5 flex flex-col gap-4 shadow-glass-sm relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-full blur-2xl pointer-events-none" />
+          
+          <h3 className="font-extrabold text-white text-base flex items-center gap-2">
+            <Radio className="w-4 h-4 text-purple-400 animate-pulse" />
+            <span>Payment Gateway API</span>
+          </h3>
+          <p className="text-[10px] text-gray-400 leading-relaxed">
+            Select and configure your active commercial payment gateway for verified, automated credit status detection.
+          </p>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Active Gateway</label>
+            <select
+              value={activeGateway}
+              onChange={(e) => setActiveGateway(e.target.value)}
+              className="glass-input text-xs font-semibold py-2.5 bg-[#0B0F19] cursor-pointer text-white border-white/5 outline-none rounded-xl"
+            >
+              <option value="MOCK">MOCK SIMULATOR (AUTO-SUCCESS)</option>
+              <option value="PHONEPE">PHONEPE MERCHANT API</option>
+              <option value="RAZORPAY">RAZORPAY PAYMENTS API</option>
+              <option value="CASHFREE">CASHFREE CHECKOUT API</option>
+            </select>
+          </div>
+
+          {activeGateway === 'PHONEPE' && (
+            <div className="flex flex-col gap-3 mt-1 animate-scale-in">
+              <input
+                type="text"
+                value={phonepeMerchantId}
+                onChange={(e) => setPhonepeMerchantId(e.target.value)}
+                placeholder="PhonePe Merchant ID"
+                className="glass-input text-[11px] font-mono py-2.5"
+              />
+              <input
+                type="password"
+                value={phonepeSaltKey}
+                onChange={(e) => setPhonepeSaltKey(e.target.value)}
+                placeholder="PhonePe Salt Key"
+                className="glass-input text-[11px] font-mono py-2.5"
+              />
+              <input
+                type="text"
+                value={phonepeSaltIndex}
+                onChange={(e) => setPhonepeSaltIndex(e.target.value)}
+                placeholder="Salt Index (e.g. 1)"
+                className="glass-input text-[11px] font-mono py-2.5"
+              />
+            </div>
+          )}
+
+          {activeGateway === 'RAZORPAY' && (
+            <div className="flex flex-col gap-3 mt-1 animate-scale-in">
+              <input
+                type="text"
+                value={razorpayKeyId}
+                onChange={(e) => setRazorpayKeyId(e.target.value)}
+                placeholder="Razorpay Key ID"
+                className="glass-input text-[11px] font-mono py-2.5"
+              />
+              <input
+                type="password"
+                value={razorpayKeySecret}
+                onChange={(e) => setRazorpayKeySecret(e.target.value)}
+                placeholder="Razorpay Secret"
+                className="glass-input text-[11px] font-mono py-2.5"
+              />
+            </div>
+          )}
+
+          {activeGateway === 'CASHFREE' && (
+            <div className="flex flex-col gap-3 mt-1 animate-scale-in">
+              <input
+                type="text"
+                value={cashfreeAppId}
+                onChange={(e) => setCashfreeAppId(e.target.value)}
+                placeholder="Cashfree App ID"
+                className="glass-input text-[11px] font-mono py-2.5"
+              />
+              <input
+                type="password"
+                value={cashfreeSecretKey}
+                onChange={(e) => setCashfreeSecretKey(e.target.value)}
+                placeholder="Cashfree Secret"
+                className="glass-input text-[11px] font-mono py-2.5"
+              />
+            </div>
+          )}
+        </div>
+
         {/* Firebase Sync */}
         <div className="glass-panel rounded-3xl p-6 border-white/5 flex flex-col gap-4 shadow-glass-sm relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl pointer-events-none" />
