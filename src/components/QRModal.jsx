@@ -19,6 +19,7 @@ export default function QRModal({ amount, customerName, settings, onClose, onPay
   const shopName = settings?.shopName || "BharatPay POS Store";
   const upiId = settings?.upiId || "merchant@upi";
   const holderName = settings?.holderName || "Store Owner";
+  const activeGateway = settings?.activeGateway || "MOCK";
 
   // 1. Initiate live or sandbox payment on mount
   useEffect(() => {
@@ -57,18 +58,18 @@ export default function QRModal({ amount, customerName, settings, onClose, onPay
 
   // 3. Automatic Smart Settlement Sensor (Mock Sandbox fallback)
   useEffect(() => {
-    if (status !== 'PENDING' || settings.activeGateway !== 'MOCK') return;
+    if (status !== 'PENDING' || activeGateway !== 'MOCK') return;
     
     const autoSuccessTimer = setTimeout(() => {
       handleSimulateStatus('SUCCESS');
     }, 7000); // 7 seconds simulated sandbox scan and pay
 
     return () => clearTimeout(autoSuccessTimer);
-  }, [status, settings.activeGateway]);
+  }, [status, activeGateway]);
 
   // 4. Live Gateway status polling loop (PhonePe / Razorpay / Cashfree)
   useEffect(() => {
-    if (status !== 'PENDING' || settings.activeGateway === 'MOCK') return;
+    if (status !== 'PENDING' || activeGateway === 'MOCK') return;
 
     const statusPolling = setInterval(async () => {
       try {
@@ -84,7 +85,7 @@ export default function QRModal({ amount, customerName, settings, onClose, onPay
     }, 3000); // Poll status API every 3 seconds
 
     return () => clearInterval(statusPolling);
-  }, [status, txnId, settings]);
+  }, [status, txnId, settings, activeGateway]);
 
   // Audio Broadcaster / Speech synthesiser
   const triggerAudioReceipt = () => {
@@ -236,9 +237,9 @@ export default function QRModal({ amount, customerName, settings, onClose, onPay
               <div className="text-center max-w-xs">
                 <p className="text-gray-200 text-sm font-semibold">Scan and pay using any UPI App</p>
                 <p className="text-gray-400 text-xs mt-1 leading-relaxed">
-                  {settings.activeGateway === 'MOCK' 
+                  {activeGateway === 'MOCK' 
                     ? 'Running in Sandbox Mode. Auto-settles in 7 seconds.' 
-                    : `Active Live Gateway: ${settings.activeGateway}`}
+                    : `Active Live Gateway: ${activeGateway}`}
                 </p>
               </div>
 
@@ -253,7 +254,7 @@ export default function QRModal({ amount, customerName, settings, onClose, onPay
               <div className="w-full bg-white/2 rounded-2xl p-4 border border-white/5 flex justify-between items-center">
                 <span className="text-gray-400 text-xs flex items-center gap-1.5">
                   <Loader2 className="w-3.5 h-3.5 text-indigo-400 animate-spin" />
-                  {settings.activeGateway === 'MOCK' 
+                  {activeGateway === 'MOCK' 
                     ? 'Awaiting virtual payment confirmation...' 
                     : 'Listening to real-time bank credit webhooks...'}
                 </span>
@@ -290,7 +291,7 @@ export default function QRModal({ amount, customerName, settings, onClose, onPay
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Settlement Gateway</span>
-                  <span className="text-white font-semibold font-mono">{settings.activeGateway === 'MOCK' ? 'SANDBOX SIMULATOR' : settings.activeGateway}</span>
+                  <span className="text-white font-semibold font-mono">{activeGateway === 'MOCK' ? 'SANDBOX SIMULATOR' : activeGateway}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Verification Source</span>

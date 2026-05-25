@@ -26,7 +26,8 @@ export default function App() {
       bankName: 'STATE BANK OF INDIA',
       adminPin: '1234',
       enableVoice: true,
-      cloudSyncEnabled: false
+      cloudSyncEnabled: false,
+      activeGateway: 'MOCK'
     };
   });
 
