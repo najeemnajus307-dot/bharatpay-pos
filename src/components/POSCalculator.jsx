@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Mic, MicOff, User, CreditCard, ChevronRight, CornerDownLeft, RefreshCcw, DollarSign } from 'lucide-react';
-import { useSpeech } from '../hooks/useSpeech';
+import { User, CreditCard, ChevronRight, CornerDownLeft, RefreshCcw, DollarSign } from 'lucide-react';
 import { formatRupee } from '../utils/formatters';
 
 export default function POSCalculator({ onGenerateQR, settings }) {
@@ -8,40 +7,6 @@ export default function POSCalculator({ onGenerateQR, settings }) {
   const [currentInput, setCurrentInput] = useState('');
   const [activeOperation, setActiveOperation] = useState(null); // 'ADD', 'SUBTRACT'
   const [customerName, setCustomerName] = useState('');
-  const [isListeningMic, setIsListeningMic] = useState(false);
-
-  // Command processor callback
-  const handleVoiceCommand = (command) => {
-    switch (command.type) {
-      case 'ADD':
-        setTotal(prev => prev + command.value);
-        break;
-      case 'SUBTRACT':
-        setTotal(prev => Math.max(0, prev - command.value));
-        break;
-      case 'SET':
-        setTotal(command.value);
-        break;
-      case 'CLEAR':
-        handleClear();
-        break;
-      case 'GENERATE_QR':
-        handleCheckout();
-        break;
-      default:
-        break;
-    }
-  };
-
-  const { isListening, speechSupported, startListening, stopListening } = useSpeech(handleVoiceCommand);
-
-  const toggleVoiceInput = () => {
-    if (isListening) {
-      stopListening();
-    } else {
-      startListening();
-    }
-  };
 
   const handleNumClick = (val) => {
     if (currentInput.includes('.') && val === '.') return;
@@ -227,57 +192,6 @@ export default function POSCalculator({ onGenerateQR, settings }) {
             <User className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           </div>
         </div>
-
-        {/* Voice Command panel */}
-        {speechSupported && (
-          <div className="glass-panel rounded-3xl p-6 shadow-glass-sm border-white/5 flex flex-col items-center text-center gap-4 relative overflow-hidden">
-            <div className="absolute top-3 right-4 flex items-center gap-1 text-[10px] font-bold text-indigo-400 bg-indigo-500/5 px-2 py-0.5 rounded-full border border-indigo-500/10">
-              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-              <span>VOICE ENABLED</span>
-            </div>
-            
-            <h3 className="text-sm font-bold text-gray-200 mt-2">Speech Billing Assistant</h3>
-            
-            {/* Glowing mic visualizer */}
-            <button
-              onClick={toggleVoiceInput}
-              className={`w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 relative ${
-                isListening
-                  ? 'bg-gradient-to-tr from-indigo-500 to-purple-600 shadow-glow-indigo scale-105'
-                  : 'bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white'
-              }`}
-            >
-              {isListening ? (
-                <>
-                  <Mic className="w-8 h-8 text-white z-10 animate-bounce" />
-                  <span className="absolute inset-0 rounded-full bg-indigo-500/30 animate-ping" />
-                  <span className="absolute -inset-2 rounded-full bg-indigo-500/10 animate-pulse" />
-                </>
-              ) : (
-                <MicOff className="w-8 h-8" />
-              )}
-            </button>
-
-            {isListening ? (
-              <div className="flex flex-col gap-1 items-center">
-                <p className="text-indigo-400 font-semibold text-xs tracking-tight animate-pulse">Listening for voice instructions...</p>
-                <div className="flex items-center gap-1.5 mt-1.5">
-                  <span className="w-1.5 h-3 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                  <span className="w-1.5 h-5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-                  <span className="w-1.5 h-4 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }} />
-                  <span className="w-1.5 h-6 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
-                </div>
-              </div>
-            ) : (
-              <p className="text-gray-400 text-xs leading-relaxed px-2">
-                Click microphone to issue verbal commands: <br />
-                <span className="font-semibold text-indigo-400">"Add 150"</span>, 
-                <span className="font-semibold text-indigo-400"> "Minus 50"</span>, or 
-                <span className="font-semibold text-indigo-400"> "Clear"</span>.
-              </p>
-            )}
-          </div>
-        )}
 
         {/* Checkout panel */}
         <button

@@ -32,6 +32,18 @@ export default function QRModal({ amount, customerName, settings, onClose, onPay
     return () => clearInterval(timer);
   }, [countdown, status]);
 
+  // Automatic Smart Settlement Sensor
+  // Simulates bank credit detection 7 seconds after QR is scanned
+  useEffect(() => {
+    if (status !== 'PENDING') return;
+    
+    const autoSuccessTimer = setTimeout(() => {
+      handleSimulateStatus('SUCCESS');
+    }, 7000); // 7 seconds simulation
+
+    return () => clearTimeout(autoSuccessTimer);
+  }, [status]);
+
   // Audio Broadcaster / Speech synthesiser
   const triggerAudioReceipt = () => {
     if (audioAnnouncedRef.current) return;
